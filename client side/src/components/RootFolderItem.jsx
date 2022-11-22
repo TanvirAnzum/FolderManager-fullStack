@@ -5,10 +5,12 @@ import addIcon from "../assets/icons/add.png";
 import expandIcon from "../assets/icons/expand.png";
 import FolderItem from "./FolderItem";
 import InputModal from "./InputModal";
+import { BgDiv } from "./styles/BgDiv.styled";
 import { Folder } from "./styles/Folder.styled";
 import { FolderChildren } from "./styles/FolderChildren.styled";
 import { Img } from "./styles/Img.styled";
 import { Item } from "./styles/Item.styled";
+import { Loader } from "./styles/Loader.styled";
 
 const RootFolderItem = () => {
   const [isExpand, setIsExpand] = useState(false);
@@ -17,7 +19,7 @@ const RootFolderItem = () => {
   const parentId = process.env.REACT_APP_ROOT_ID;
 
   // all root folders are fetching from server
-  const { data } = useQuery([`folders_${parentId}`, parentId], () =>
+  const { data, isLoading } = useQuery([`folders_${parentId}`, parentId], () =>
     getFolders(parentId)
   );
 
@@ -55,6 +57,12 @@ const RootFolderItem = () => {
           setIsModal={setIsModal}
           invalidate={`folders_${parentId}`}
         />
+      )}
+      {isLoading && (
+        <>
+          <BgDiv></BgDiv>
+          <Loader></Loader>
+        </>
       )}
     </>
   );

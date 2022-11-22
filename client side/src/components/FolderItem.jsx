@@ -5,10 +5,12 @@ import addIcon from "../assets/icons/add.png";
 import expandIcon from "../assets/icons/expand.png";
 import deleteIcon from "../assets/icons/remove.png";
 import InputModal from "./InputModal";
+import { BgDiv } from "./styles/BgDiv.styled";
 import { Folder } from "./styles/Folder.styled";
 import { FolderChildren } from "./styles/FolderChildren.styled";
 import { Img } from "./styles/Img.styled";
 import { Item } from "./styles/Item.styled";
+import { Loader } from "./styles/Loader.styled";
 
 const FolderItem = ({ folder }) => {
   const [isExpand, setIsExpand] = useState(false);
@@ -20,10 +22,12 @@ const FolderItem = ({ folder }) => {
   const { title, _id, parentId } = folder || {};
 
   // fetch child folders
-  const { data } = useQuery([`folders_${_id}`, _id], () => getFolders(_id));
+  const { data, isLoading } = useQuery([`folders_${_id}`, _id], () =>
+    getFolders(_id)
+  );
 
   // delete handlers
-  const { mutate: remove } = useMutation({
+  const { mutate: remove, isLoading: isDeleting } = useMutation({
     mutationFn: deleteFolder,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`folders_${parentId}`] });
@@ -69,6 +73,12 @@ const FolderItem = ({ folder }) => {
           invalidate={`folders_${_id}`}
           parent={_id}
         />
+      )}
+      {(isLoading || isDeleting) && (
+        <>
+          <BgDiv></BgDiv>
+          <Loader></Loader>
+        </>
       )}
     </>
   );
