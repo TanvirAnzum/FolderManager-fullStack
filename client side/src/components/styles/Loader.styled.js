@@ -8,8 +8,7 @@ export const Loader = styled.div`
   width: 60px;
   height: 60px;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
   animation: ${Spin} 2s linear infinite;
 `;
